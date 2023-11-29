@@ -1,0 +1,145 @@
+CREATE TABLE Pagamento
+(
+  valor FLOAT,
+  idPagamento INT PRIMARY KEY,
+  dataHora DATE,
+  idVendas INT
+);
+
+CREATE TABLE Venda
+(
+  idVenda INT PRIMARY KEY,
+  dataHora DATE,
+  valor FLOAT
+);
+
+CREATE TABLE Funcionario
+(
+  idFuncionario INT PRIMARY KEY,
+  nome VARCHAR(200),
+  infoContato VARCHAR(200)
+);
+
+CREATE TABLE Item_vendido
+(
+  idVenda INT PRIMARY KEY,
+  quantidade INT,
+  valor FLOAT
+);
+
+CREATE TABLE Estoque
+(
+  idEstoque INT PRIMARY KEY,
+  localizacao VARCHAR(200),
+  nome VARCHAR(200),
+  quantidade INT
+);
+
+CREATE TABLE Produto
+(
+  idProduto INT PRIMARY KEY,
+  infoProduto VARCHAR(200),
+  codigoDeBarras INT,
+  nome VARCHAR(200)
+);
+
+CREATE TABLE Fabricante
+(
+  idFabricante INT PRIMARY KEY,
+  nome VARCHAR(200),
+  infoContato VARCHAR(200)
+);
+
+CREATE TABLE Fornecedor
+(
+  cnpj INT PRIMARY KEY,
+  nome VARCHAR(200),
+  infoContato VARCHAR(200)
+);
+
+CREATE TABLE Entity
+(
+  idEntity INT PRIMARY KEY
+);
+
+
+CREATE TABLE Fabrica
+(
+  idProduto INT,
+  idFabricante INT,
+  PRIMARY KEY (idProduto, idFabricante),
+  FOREIGN KEY (idProduto) REFERENCES Produto(idProduto),
+  FOREIGN KEY (idFabricante) REFERENCES Fabricante(idFabricante)
+);
+
+CREATE TABLE Contem
+(
+  idProduto INT,
+  idVenda INT,
+  PRIMARY KEY (idProduto, idVenda),
+  FOREIGN KEY (idProduto) REFERENCES Produto(idProduto),
+  FOREIGN KEY (idVenda) REFERENCES Venda(idVenda)
+);
+
+CREATE TABLE Armazena
+(
+  idProduto INT,
+  idEstoque INT,
+  PRIMARY KEY (idProduto, idEstoque),
+  FOREIGN KEY (idProduto) REFERENCES Produto(idProduto),
+  FOREIGN KEY (idEstoque) REFERENCES Estoque(idEstoque)
+);
+
+CREATE TABLE Possui
+(
+  idVenda INT,
+  idItemVendido INT,
+  PRIMARY KEY (idVenda, idItemVendido),
+  FOREIGN KEY (idVenda) REFERENCES Venda(idVenda),
+  FOREIGN KEY (idItemVendido) REFERENCES Item_vendido(idVenda)
+);
+
+CREATE TABLE Mantem
+(
+  idFuncionario INT,
+  idVenda INT,
+  PRIMARY KEY (idFuncionario, idVenda),
+  FOREIGN KEY (idFuncionario) REFERENCES Funcionario(idFuncionario),
+  FOREIGN KEY (idVenda) REFERENCES Venda(idVenda)
+);
+
+CREATE TABLE Movimenta
+(
+  idEstoque INT,
+  idFuncionario INT,
+  PRIMARY KEY (idEstoque, idFuncionario),
+  FOREIGN KEY (idEstoque) REFERENCES Estoque(idEstoque),
+  FOREIGN KEY (idFuncionario) REFERENCES Funcionario(idFuncionario)
+);
+
+CREATE TABLE Solicita
+(
+  idFabricante INT,
+  idFuncionario INT,
+  PRIMARY KEY (idFabricante, idFuncionario),
+  FOREIGN KEY (idFabricante) REFERENCES Fabricante(idFabricante),
+  FOREIGN KEY (idFuncionario) REFERENCES Funcionario(idFuncionario)
+);
+
+CREATE TABLE Cadastra
+(
+  cnpj INT,
+  idFuncionario INT,
+  PRIMARY KEY (cnpj, idFuncionario),
+  FOREIGN KEY (cnpj) REFERENCES Fornecedor(cnpj),
+  FOREIGN KEY (idFuncionario) REFERENCES Funcionario(idFuncionario)
+);
+
+CREATE TABLE Fornecido
+(
+  idProduto INT,
+  cnpj INT,
+  PRIMARY KEY (idProduto, cnpj),
+  FOREIGN KEY (idProduto) REFERENCES Produto(idProduto),
+  FOREIGN KEY (cnpj) REFERENCES Fornecedor(cnpj)
+);
